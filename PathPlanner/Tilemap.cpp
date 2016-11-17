@@ -117,6 +117,20 @@ void Tilemap::click(ALLEGRO_MOUSE_STATE _mouse, bool _isShift)
   {
     for (int c = 0; c < m_tilesY; c++)
     {
+      if (_mouse.buttons & 1 && _isShift == true)
+      {
+        if (m_tilemap[r][c]->getTileType() == START)
+        {
+          (m_tilemap[r][c]->setTileType(FLOOR));
+        }
+      }
+      if (_mouse.buttons & 2 && _isShift == true)
+      {
+        if (m_tilemap[r][c]->getTileType() == END)
+        {
+          (m_tilemap[r][c]->setTileType(FLOOR));
+        }
+      }
       m_tilemap[r][c]->click(_mouse, _isShift);
     }
   }
