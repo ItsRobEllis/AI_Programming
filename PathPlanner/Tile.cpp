@@ -66,10 +66,10 @@ void Tile::renderTile()
   }
   else if (m_tileType == START)
   {
-    al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(0, 200, 40));
+    al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(0, 170, 40));
   }
   else if (m_tileType == END)
   {
-    al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(200, 0, 40));
+    al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(170, 0, 40));
   }
 }
