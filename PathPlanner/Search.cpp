@@ -45,8 +45,10 @@ std::vector<std::shared_ptr<Tile>> Search::BreadthFirst(std::shared_ptr<Tile> _s
       }
       m_tileQueue.push(m_neighbour[n]);
       m_neighbour[n]->setTileOpened(true);
+      //m_neighbour[n]->setTileClosed(true);
       m_neighbour[n]->setParent(m_currentTile);
     }
   }
+  m_core->logMsg(Core::STANDARD, "Search ended!");
   return {};
 }

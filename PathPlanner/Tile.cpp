@@ -14,6 +14,8 @@ Tile::Tile(int _posX, int _posY, int _tileW, int _tileH, bool _isDarkTile)
   m_parent = nullptr;
   m_indX = m_posX / m_tileW;
   m_indY = m_posY / m_tileH;
+  m_beenOpened = false;
+  m_beenClosed = false;
 }
 
 Tile::~Tile()
@@ -60,6 +62,11 @@ void Tile::renderTile()
   if (m_tileType == FLOOR)
   {
     if (m_isDark == true) { al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(231, 231, 240)); }
+    else { al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(222, 222, 231)); }
+  }
+  else if (m_tileType == FLOOR && m_beenClosed == true)
+  {
+    if (m_isDark == true) { al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(200, 200, 255)); }
     else { al_draw_filled_rectangle(m_posX, _padding + m_posY, (m_posX + m_tileW), (_padding + m_posY + m_tileH), al_map_rgb(222, 222, 231)); }
   }
   else if (m_tileType == OBSTACLE)

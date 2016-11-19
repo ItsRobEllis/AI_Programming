@@ -141,19 +141,23 @@ void Tilemap::click(ALLEGRO_MOUSE_STATE _mouse, bool _isShift)
 std::vector<std::shared_ptr<Tile>> Tilemap::getNeighbours(std::shared_ptr<Tile> _tile)
 {
   std::vector<std::shared_ptr<Tile>> m_neighbours;
-  if (_tile->getIndY() + 1 < m_tilesY || _tile->getTileType() != OBSTACLE)
+  //Right Boundary
+  if (_tile->getIndY() + 1 <= m_tilesY - 1 && _tile->getTileType() != OBSTACLE)
   {
     m_neighbours.push_back(m_tilemap[_tile->getIndY() + 1][_tile->getIndX()]);
   }
-  if (_tile->getIndY() - 1 >= 0 || _tile->getTileType() != OBSTACLE)
+  //Left Boundary
+  if (_tile->getIndY() - 1 >= 0 && _tile->getTileType() != OBSTACLE)
   {
     m_neighbours.push_back(m_tilemap[_tile->getIndY() - 1][_tile->getIndX()]);
   }
-  if (_tile->getIndX() + 1 < m_tilesX || _tile->getTileType() != OBSTACLE)
+  //Bottom Boundary
+  if (_tile->getIndX() + 1 <= m_tilesX - 1 && _tile->getTileType() != OBSTACLE)
   {
     m_neighbours.push_back(m_tilemap[_tile->getIndY()][_tile->getIndX() + 1]);
   }
-  if (_tile->getIndX() - 1 >= 0 || _tile->getTileType() != OBSTACLE)
+  //Top Boundary
+  if (_tile->getIndX() - 1 >= 0 && _tile->getTileType() != OBSTACLE)
   {
     m_neighbours.push_back(m_tilemap[_tile->getIndY()][_tile->getIndX() - 1]);
   }

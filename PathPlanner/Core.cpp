@@ -125,9 +125,21 @@ int Core::Update()
         }
         case ALLEGRO_KEY_SPACE:
         {
+          //RYANHERE
           if (m_tilemap->getStart() != nullptr && m_tilemap->getEnd() != nullptr)
           {
-            m_pathfinder->BreadthFirst(m_tilemap->getStart(), m_tilemap->getEnd(), m_tilemap);
+            std::vector<std::shared_ptr<Tile>> m_path = m_pathfinder->BreadthFirst(m_tilemap->getStart(), m_tilemap->getEnd(), m_tilemap);
+            if (!m_path.empty())
+            {
+              for (int i = 0; i < m_path.size(); i++)
+              {
+                std::cout << m_path[i]->getIndX() << ", " << m_path[i]->getIndY() << std::endl;
+              }
+            }
+            else
+            {
+              std::cout << "THE PATH IS EMPTY\n";
+            }
           }        
           m_keys[SPACE] = true;
           break;
