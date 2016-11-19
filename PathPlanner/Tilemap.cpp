@@ -117,10 +117,12 @@ void Tilemap::click(ALLEGRO_MOUSE_STATE _mouse, bool _isShift)
   {
     for (int c = 0; c < m_tilesY; c++)
     {
+      // Checks to see if a start or end point exists 
       if (_mouse.buttons & 1 && _isShift == true)
       {
         if (m_tilemap[r][c]->getTileType() == START)
         {
+          //If it exists, it removes it
           (m_tilemap[r][c]->setTileType(FLOOR));
         }
       }
@@ -134,4 +136,58 @@ void Tilemap::click(ALLEGRO_MOUSE_STATE _mouse, bool _isShift)
       m_tilemap[r][c]->click(_mouse, _isShift);
     }
   }
+}
+
+std::vector<std::shared_ptr<Tile>> Tilemap::getNeighbours(std::shared_ptr<Tile> _tile)
+{
+  std::vector<std::shared_ptr<Tile>> m_neighbours;
+  if (_tile->getIndY() + 1 < m_tilesY || _tile->getTileType() != OBSTACLE)
+  {
+    m_neighbours.push_back(m_tilemap[_tile->getIndY() + 1][_tile->getIndX()]);
+  }
+  if (_tile->getIndY() - 1 >= 0 || _tile->getTileType() != OBSTACLE)
+  {
+    m_neighbours.push_back(m_tilemap[_tile->getIndY() - 1][_tile->getIndX()]);
+  }
+  if (_tile->getIndX() + 1 < m_tilesX || _tile->getTileType() != OBSTACLE)
+  {
+    m_neighbours.push_back(m_tilemap[_tile->getIndY()][_tile->getIndX() + 1]);
+  }
+  if (_tile->getIndX() - 1 >= 0 || _tile->getTileType() != OBSTACLE)
+  {
+    m_neighbours.push_back(m_tilemap[_tile->getIndY()][_tile->getIndX() - 1]);
+  }
+  return m_neighbours;
+}
+
+std::shared_ptr<Tile> Tilemap::getStart()
+{
+  for (int r = 0; r < m_tilesX; r++)
+  {
+    for (int c = 0; c < m_tilesY; c++)
+    {
+      if (m_tilemap[r][c]->getTileType() == START)
+      {
+        return m_tilemap[r][c];
+      }
+    }
+  }
+  m_core->logMsg(Core::WARN, "Startpoint not found, search cannot run!");
+  return nullptr;
+}
+
+std::shared_ptr<Tile> Tilemap::getEnd()
+{
+  for (int r = 0; r < m_tilesX; r++)
+  {
+    for (int c = 0; c < m_tilesY; c++)
+    {
+      if (m_tilemap[r][c]->getTileType() == END)
+      {
+        return m_tilemap[r][c];
+      }
+    }
+  }
+  m_core->logMsg(Core::WARN, "Endpoint not found, search cannot run!");
+  return nullptr;
 }

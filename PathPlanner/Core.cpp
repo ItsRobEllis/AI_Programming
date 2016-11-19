@@ -75,6 +75,9 @@ int Core::Init()
   m_tilemap = std::make_shared<Tilemap>();
   m_tilemap->create(64, 32, 22);
 
+  //Create an instance of search
+  m_pathfinder = std::make_shared<Search>();
+
   //Create a display
   m_display = al_create_display(getScreenW(), getScreenH());
   m_currentGameState = "Playing";
@@ -120,19 +123,13 @@ int Core::Update()
           m_finished = true;
           break;
         }
-        case ALLEGRO_KEY_UP:
+        case ALLEGRO_KEY_SPACE:
         {
-          m_keys[UP] = true;
-          break;
-        }
-        case ALLEGRO_KEY_DOWN:
-        {
-          m_keys[DOWN] = true;
-          break;
-        }
-        case ALLEGRO_KEY_ENTER:
-        {
-          m_keys[ENTER] = true;
+          if (m_tilemap->getStart() != nullptr && m_tilemap->getEnd() != nullptr)
+          {
+            m_pathfinder->BreadthFirst(m_tilemap->getStart(), m_tilemap->getEnd(), m_tilemap);
+          }        
+          m_keys[SPACE] = true;
           break;
         }
         case ALLEGRO_KEY_LSHIFT:

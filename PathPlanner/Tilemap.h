@@ -1,6 +1,7 @@
 #ifndef _TILEMAP_H_
 #define _TILEMAP_H_
 
+class Core;
 class Tile;
 class Tilemap
 {
@@ -12,6 +13,10 @@ public:
   void addTiles(int _tilesX, int _tilesY);
   void renderTiles();
   void click(ALLEGRO_MOUSE_STATE _mouse, bool _isShift);
+  std::vector<std::shared_ptr<Tile>> getNeighbours(std::shared_ptr<Tile> _tile);
+
+  std::shared_ptr<Tile> getStart();
+  std::shared_ptr<Tile> getEnd();
 private:
   int m_tilesX,
       m_tilesY,

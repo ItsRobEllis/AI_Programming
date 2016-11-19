@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include <iomanip>
+#include <queue>
 
 // Allegro5 includes
 #include "allegro5/allegro.h"
@@ -23,3 +24,4 @@
 #include "Core.h"
 #include "Tilemap.h"
 #include "Tile.h"
+#include "Search.h"

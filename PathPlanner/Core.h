@@ -5,6 +5,7 @@
 #ifndef _CORE_H_
 #define _CORE_H_
 
+class Search;
 class Tilemap;
 class Core
 {
@@ -23,7 +24,7 @@ public:
 
   //Keyboard Buttons
   std::vector<bool> m_keys;
-  enum KEYS { UP, DOWN, ENTER, LSHIFT };
+  enum KEYS { SPACE, LSHIFT };
 
   //Allegro
   ALLEGRO_EVENT_QUEUE *m_eventQueue;
@@ -64,6 +65,9 @@ public:
   int m_currentFrame;
   std::string m_currentGameState;
   std::string m_currentTool;
+
+  //Search functions
+  std::shared_ptr<Search> m_pathfinder;
   
   //Mouse Variables
   ALLEGRO_MOUSE_STATE m_mouse;

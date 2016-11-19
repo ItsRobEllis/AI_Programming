@@ -11,6 +11,9 @@ Tile::Tile(int _posX, int _posY, int _tileW, int _tileH, bool _isDarkTile)
   m_tileW = _tileW;
   m_tileH = _tileH;
   m_isDark = _isDarkTile;
+  m_parent = nullptr;
+  m_indX = m_posX / m_tileW;
+  m_indY = m_posY / m_tileH;
 }
 
 Tile::~Tile()
