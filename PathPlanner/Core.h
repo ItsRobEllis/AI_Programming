@@ -6,6 +6,7 @@
 #define _CORE_H_
 
 class Search;
+class Tile;
 class Tilemap;
 class Core
 {
@@ -31,6 +32,7 @@ public:
   ALLEGRO_TIMER *m_alTimer;
   ALLEGRO_DISPLAY *m_display;
   ALLEGRO_FONT *m_font;
+  ALLEGRO_FONT *m_fontsmall;
 
   //Functions
   void logMsg(TYPE msgType, std::string msgBody);
@@ -68,6 +70,7 @@ public:
 
   //Search functions
   std::shared_ptr<Search> m_pathfinder;
+  std::vector<std::shared_ptr<Tile>> m_path;
   
   //Mouse Variables
   ALLEGRO_MOUSE_STATE m_mouse;

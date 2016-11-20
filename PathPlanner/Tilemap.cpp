@@ -4,6 +4,7 @@
 Tilemap::Tilemap()
 {
 	m_core = Core::GetCore();
+  m_showCoords = false;
 }
 
 Tilemap::~Tilemap()
@@ -69,7 +70,7 @@ void Tilemap::addTiles(int _tilesX, int _tilesY)
       bool _isDark = isDarkTile(r, c);
 
       //Create a tile
-      std::shared_ptr<Tile> _newTile = std::make_shared<Tile>(r * m_tileW, c * m_tileH, m_tileW, m_tileH, _isDark);
+      std::shared_ptr<Tile> _newTile = std::make_shared<Tile>(r * m_tileW, c * m_tileH + 65, m_tileW, m_tileH, _isDark);
 
       m_tilemap[r][c] = _newTile;
     }
@@ -87,6 +88,10 @@ void Tilemap::renderTiles()
       bool _isDark = isDarkTile(r, c);
       //Render a tile
       m_tilemap[r][c]->renderTile();
+      if (m_showCoords)
+      {
+        al_draw_textf(Core::GetCore()->m_fontsmall, al_map_rgb(150, 150, 150), m_tilemap[r][c]->getX(), m_tilemap[r][c]->getY(), 0, "%i,%i", m_tilemap[r][c]->getIndX(), m_tilemap[r][c]->getIndY());
+      } 
     }
   }
 }
@@ -141,25 +146,38 @@ void Tilemap::click(ALLEGRO_MOUSE_STATE _mouse, bool _isShift)
 std::vector<std::shared_ptr<Tile>> Tilemap::getNeighbours(std::shared_ptr<Tile> _tile)
 {
   std::vector<std::shared_ptr<Tile>> m_neighbours;
+  //std::cout << _tile->getIndX() << ", " << _tile->getIndY() << std::endl;
   //Right Boundary
-  if (_tile->getIndY() + 1 <= m_tilesY - 1 && _tile->getTileType() != OBSTACLE)
+  if (_tile->getIndX() + 1 <= m_tilesX - 1)
   {
-    m_neighbours.push_back(m_tilemap[_tile->getIndY() + 1][_tile->getIndX()]);
+    if (_tile->getTileType() != OBSTACLE)
+    {
+      m_neighbours.push_back(m_tilemap[_tile->getIndX() + 1][_tile->getIndY()]);
+    }
   }
   //Left Boundary
-  if (_tile->getIndY() - 1 >= 0 && _tile->getTileType() != OBSTACLE)
+  if (_tile->getIndX() - 1 >= 0)
   {
-    m_neighbours.push_back(m_tilemap[_tile->getIndY() - 1][_tile->getIndX()]);
+    if (_tile->getTileType() != OBSTACLE)
+    {
+      m_neighbours.push_back(m_tilemap[_tile->getIndX() - 1][_tile->getIndY()]);
+    }
   }
   //Bottom Boundary
-  if (_tile->getIndX() + 1 <= m_tilesX - 1 && _tile->getTileType() != OBSTACLE)
+  if (_tile->getIndY() + 1 <= m_tilesY - 1)
   {
-    m_neighbours.push_back(m_tilemap[_tile->getIndY()][_tile->getIndX() + 1]);
+    if (_tile->getTileType() != OBSTACLE)
+    {
+      m_neighbours.push_back(m_tilemap[_tile->getIndX()][_tile->getIndY() + 1]);
+    }
   }
   //Top Boundary
-  if (_tile->getIndX() - 1 >= 0 && _tile->getTileType() != OBSTACLE)
+  if (_tile->getIndY() - 1 >= 0)
   {
-    m_neighbours.push_back(m_tilemap[_tile->getIndY()][_tile->getIndX() - 1]);
+    if (_tile->getTileType() != OBSTACLE)
+    {
+      m_neighbours.push_back(m_tilemap[_tile->getIndX()][_tile->getIndY() - 1]);
+    }
   }
   return m_neighbours;
 }
@@ -194,4 +212,19 @@ std::shared_ptr<Tile> Tilemap::getEnd()
   }
   m_core->logMsg(Core::WARN, "Endpoint not found, search cannot run!");
   return nullptr;
+}
+
+void Tilemap::clearTileFlags()
+{ 
+  for (int r = 0; r < m_tilesX; r++)
+  {
+    for (int c = 0; c < m_tilesY; c++)
+    {
+      if (m_tilemap[r][c]->getTileClosed() == true || m_tilemap[r][c]->getTileOpened())
+      {
+        m_tilemap[r][c]->setTileClosed(false);
+        m_tilemap[r][c]->setTileOpened(false);
+      }
+    }
+  }
 }

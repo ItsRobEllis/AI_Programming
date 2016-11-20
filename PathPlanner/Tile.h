@@ -23,8 +23,15 @@ public:
   int setX(int _x) { m_posX = _x; };
   int setY(int _y) { m_posX = _y; };
 
+  //Numbers of tiles for X and Y
   int getIndX(void) { return m_indX; };
   int getIndY(void) { return m_indY; };
+
+  //Tile width and height getters and setters
+  int getW(void) { return m_tileW; };
+  int getH(void) { return m_tileH; };
+  int setW(int _w) { m_posX = _w; };
+  int setH(int _h) { m_posX = _h; };
 
   //Parents
   std::shared_ptr<Tile> getParent(void) { return m_parent; };
@@ -47,9 +54,11 @@ private:
     //The tile's dimensions
       m_tileW,
       m_tileH;
+
   bool m_isDark,
        m_beenOpened,
        m_beenClosed;
+
   TType m_tileType;
   std::shared_ptr<Tile> m_parent;
 };

@@ -97,6 +97,7 @@ int Core::Init()
 
   logMsg(STANDARD, "Installing font");
   m_font = al_load_font("arial.ttf", 12, 0);
+  m_fontsmall = al_load_font("arial.ttf", 9, 0);
   logMsg(STANDARD, "Font installed");
 
   al_register_event_source(m_eventQueue, al_get_display_event_source(m_display));
@@ -125,21 +126,10 @@ int Core::Update()
         }
         case ALLEGRO_KEY_SPACE:
         {
-          //RYANHERE
           if (m_tilemap->getStart() != nullptr && m_tilemap->getEnd() != nullptr)
           {
-            std::vector<std::shared_ptr<Tile>> m_path = m_pathfinder->BreadthFirst(m_tilemap->getStart(), m_tilemap->getEnd(), m_tilemap);
-            if (!m_path.empty())
-            {
-              for (int i = 0; i < m_path.size(); i++)
-              {
-                std::cout << m_path[i]->getIndX() << ", " << m_path[i]->getIndY() << std::endl;
-              }
-            }
-            else
-            {
-              std::cout << "THE PATH IS EMPTY\n";
-            }
+            m_tilemap->clearTileFlags();
+            m_path = m_pathfinder->BreadthFirst(m_tilemap->getStart(), m_tilemap->getEnd(), m_tilemap);
           }        
           m_keys[SPACE] = true;
           break;
@@ -148,6 +138,12 @@ int Core::Update()
         {
           m_currentTool = "Start/End";
           m_keys[LSHIFT] = true;
+          break;
+        }
+        case ALLEGRO_KEY_T:
+        {
+          //Toggles the display of coordinates
+          m_tilemap->m_showCoords = !m_tilemap->m_showCoords;
           break;
         }
       }
@@ -174,10 +170,20 @@ int Core::Update()
       al_get_mouse_state(&m_mouse);
       if (m_mouse.buttons & 1) //LMB
       {
+        if (m_pathfinder->m_hasSearched)
+        {
+          m_pathfinder->m_hasSearched = false;
+          m_tilemap->clearTileFlags();
+        }
         m_tilemap->click(m_mouse, m_keys[LSHIFT]);
       }
       else if (m_mouse.buttons & 2) //RMB
       {
+        if (m_pathfinder->m_hasSearched)
+        {
+          m_pathfinder->m_hasSearched = false;
+          m_tilemap->clearTileFlags();
+        }
         m_tilemap->click(m_mouse, m_keys[LSHIFT]);
       }
       else if (m_mouse.buttons & 4) //MMB
@@ -203,6 +209,8 @@ int Core::Update()
         al_draw_textf(m_font, al_map_rgb(0, 0, 0), 10, 40, 0, "Frame: %i", m_currentFrame);
         al_draw_textf(m_font, al_map_rgb(0, 0, 0), getScreenW() - 10, 10, ALLEGRO_ALIGN_RIGHT, "Hit Esc to Exit");
         al_draw_textf(m_font, al_map_rgb(0, 0, 0), getScreenW() - 10, 40, ALLEGRO_ALIGN_RIGHT, "Current tool: %s", m_currentTool.c_str());
+
+        m_pathfinder->renderPath(m_path, m_pathfinder->m_hasSearched);
 
         //Update display
         al_flip_display();
